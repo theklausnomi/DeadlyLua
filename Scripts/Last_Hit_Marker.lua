@@ -46,7 +46,7 @@ function Tick(tick)
 				if offset == -1 then return end			
 				
 				if not rect[v.handle] then 
-					rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
+					rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,GetOffCreep(v.team,v.maxMana)) rect[v.handle].visible = false 					
 				end
 				
 				if v.visible and v.alive then
@@ -112,7 +112,7 @@ function ZuusTick(tick)
 				if offset == -1 then return end			
 				
 				if not rect[v.handle] then 
-				   rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false					
+				   rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,GetOffCreep(v.team,v.maxMana)) rect[v.handle].visible = false					
 				end
 				
 				if v.visible and v.alive then
@@ -156,6 +156,20 @@ function Damage(me)
 		end
 	end
 	return dmg
+end
+
+function GetOffCreep(team,mana)
+	if team == 2 then 
+		if mana == 0 then
+			return 150 
+		else
+			return 185
+		end
+	elseif mana == 0 then
+		return 125
+	else
+		return 150
+	end
 end
 
 function Load()
