@@ -30,7 +30,7 @@ function Tick(tick)
 	local me = entityList:GetMyHero()	
 	if not me then return end
 
-	if ad and client.gameTime > 1800 or me.dmgMin > 100 then
+	if ad and client.gameTime > 1800 or me.dmgMin > 120 then
 		GameClose()
 		script:Disable()
 	end
@@ -94,7 +94,7 @@ function ZuusTick(tick)
 	local me = entityList:GetMyHero()	
 	if not me then return end
 
-	if ad and client.gameTime > 1800 or me.dmgMin > 100 then
+	if ad and client.gameTime > 1800 or me.dmgMin > 120 then
 		GameClose()
 		script:Disable()
 	end
