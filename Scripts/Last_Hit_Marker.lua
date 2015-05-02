@@ -6,7 +6,8 @@ require("libs.Utils")
 config = ScriptConfig.new()
 config:SetParameter("LastHitKey", "C", config.TYPE_HOTKEY)
 config:SetParameter("DenayHitKey", "X", config.TYPE_HOTKEY)
-config:SetParameter("LastHit", true)
+config:SetParameter("AutoDisableLateGame", false)
+config:SetParameter("LastHit", false)
 config:Load()
 
 local rect = {}
@@ -16,6 +17,7 @@ local play1 = false
 local ex = client.screenSize.x/1600*0.8
 
 local lasthit = config.LastHit
+local ad = config.AutoDisableLateGame
 local lasthitKey = config.LastHitKey
 local denyKey = config.DenayHitKey
 
@@ -28,7 +30,7 @@ function Tick(tick)
 	local me = entityList:GetMyHero()	
 	if not me then return end
 
-	if client.gameTime > 1800 or me.dmgMin > 100 then
+	if ad and client.gameTime > 1800 or me.dmgMin > 100 then
 		GameClose()
 		script:Disable()
 	end
@@ -92,7 +94,7 @@ function ZuusTick(tick)
 	local me = entityList:GetMyHero()	
 	if not me then return end
 
-	if client.gameTime > 1800 or me.dmgMin > 100 then
+	if ad and client.gameTime > 1800 or me.dmgMin > 100 then
 		GameClose()
 		script:Disable()
 	end
