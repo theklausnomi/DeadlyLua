@@ -46,10 +46,10 @@ function Tick(tick)
 				if offset == -1 then return end			
 				
 				if not rect[v.handle] then 
-					rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,GetOffCreep(v.team,v.maxMana)) rect[v.handle].visible = false 					
+					rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,v.healthbarOffset) rect[v.handle].visible = false 					
 				end
 				
-				if v.visible and v.alive then
+				if v.visible and v.alive and v.health > 0 then
 					local damage = (dmg*(1-v.dmgResist)+1)
 					if v.health > 0 and v.health < damage then						
 						if v.team == me.team then
@@ -112,10 +112,10 @@ function ZuusTick(tick)
 				if offset == -1 then return end			
 				
 				if not rect[v.handle] then 
-				   rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,GetOffCreep(v.team,v.maxMana)) rect[v.handle].visible = false					
+				   rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,v.healthbarOffset) rect[v.handle].visible = false					
 				end
 				
-				if v.visible and v.alive then
+				if v.visible and v.alive and v.health > 0 then
 					local damage = (dmg*(1-v.dmgResist)+1)
 					if v.health > 0 and v.health < damage then						
 						if v.team == me.team then
@@ -156,20 +156,6 @@ function Damage(me)
 		end
 	end
 	return dmg
-end
-
-function GetOffCreep(team,mana)
-	if team == 2 then 
-		if mana == 0 then
-			return 150 
-		else
-			return 185
-		end
-	elseif mana == 0 then
-		return 125
-	else
-		return 150
-	end
 end
 
 function Load()
