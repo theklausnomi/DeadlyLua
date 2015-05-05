@@ -46,7 +46,7 @@ function Tick(tick)
 
 	if not me then return end
 		
-	Track()		
+	Track()
 
 	if start and me:CanCast() then
 		local sel = entityList:GetMyPlayer().selection[1]
@@ -60,7 +60,7 @@ function Tick(tick)
 		local roll = me:GetAbility(2)
 		local smash = me:GetAbility(1)
 		local last = Last()
-		local stunned = entityList:GetEntities(function (ent) return ent.type == LuaEntity.TYPE_HERO and ent.health > 0 and ent:DoesHaveModifier("modifier_stunned") end)[1]		
+		local stunned = entityList:GetEntities(function (v) return v.type == LuaEntity.TYPE_HERO and v.health > 0 and v.team ~= me.team and v:DoesHaveModifier("modifier_stunned") end)[1]		
 		
 		if stage == 0 then			
 			if me.activity == LuaEntityNPC.ACTIVITY_MOVE then
@@ -88,7 +88,7 @@ function Tick(tick)
 				stage = 3
 				sleep = tick + 800
 			end
-		elseif stage == 3 and roll:CanBeCasted() and stunned and stunned:DoesHaveModifier("modifier_earth_spirit_boulder_smash_silence") then			
+		elseif stage == 3 and roll:CanBeCasted() and stunned and stunned:DoesHaveModifier("modifier_earth_spirit_geomagnetic_grip_debuff") then
 			me:CastAbility(roll,(stunned.position - me.position) * 600 / GetDistance2D(stunned,me) + me.position,false)
 			Off()
 		end	
