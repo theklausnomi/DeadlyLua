@@ -154,7 +154,7 @@ function Damage(me)
 			return me.dmgMin*1.40 + me.dmgBonus
 		end
 	end
-	return dmg
+	return me.dmgMin + me.dmgBonus
 end
 
 function Load()
