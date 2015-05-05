@@ -23,14 +23,14 @@ local denyKey = config.DenayHitKey
 
 function Tick(tick)
 
-	if client.console or sleep > tick then return end	
+	if client.console or not SleepCheck() then return end	
 	
-	sleep = tick + 100
+	Sleep(100)
 
 	local me = entityList:GetMyHero()	
 	if not me then return end
 
-	if ad and client.gameTime > 1800 or me.dmgMin > 120 then
+	if ad and client.gameTime > 1800 or me.dmgMin > 100 then
 		GameClose()
 		script:Disable()
 	end
@@ -46,10 +46,10 @@ function Tick(tick)
 				if offset == -1 then return end			
 				
 				if not rect[v.handle] then 
-					rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,v.healthbarOffset) rect[v.handle].visible = false 					
+					rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 				end
 				
-				if v.visible and v.alive and v.health > 0 then
+				if v.visible and v.alive then
 					local damage = (dmg*(1-v.dmgResist)+1)
 					if v.health > 0 and v.health < damage then						
 						if v.team == me.team then
@@ -87,14 +87,14 @@ end
 
 function ZuusTick(tick)
 	
-	if client.console or sleep > tick then return end	
+	if client.console or not SleepCheck() then return end	
 	
-	sleep = tick + 100
+	Sleep(100)
 
 	local me = entityList:GetMyHero()	
 	if not me then return end
 
-	if ad and client.gameTime > 1800 or me.dmgMin > 120 then
+	if ad and client.gameTime > 1800 or me.dmgMin > 100 then
 		GameClose()
 		script:Disable()
 	end
@@ -112,10 +112,10 @@ function ZuusTick(tick)
 				if offset == -1 then return end			
 				
 				if not rect[v.handle] then 
-				   rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,v.healthbarOffset) rect[v.handle].visible = false					
+				   rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false					
 				end
 				
-				if v.visible and v.alive and v.health > 0 then
+				if v.visible and v.alive then
 					local damage = (dmg*(1-v.dmgResist)+1)
 					if v.health > 0 and v.health < damage then						
 						if v.team == me.team then
@@ -148,11 +148,10 @@ function ZuusTick(tick)
 end
 
 function Damage(me)
-	local dmg =  me.dmgMin
 	local items = me.items
 	for i,item in ipairs(items) do
 		if item and item.name == "item_quelling_blade" then
-			return dmg*1.40
+			return me.dmgMin*1.40 + me.dmgBonus
 		end
 	end
 	return dmg
