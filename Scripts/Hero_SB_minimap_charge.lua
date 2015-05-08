@@ -14,7 +14,6 @@ function SBKey(msg,code)
 		local me = entityList:GetMyHero()	
 		local coor = MapToMinimap(me.position.x,me.position.y)
 		if coor ~= nil then
-			local me = entityList:GetMyHero()
 			local list = entityList:GetEntities(function (v) return v.type == LuaEntity.TYPE_CREEP and v.alive and v.visible and v.team ~= me.team end)
 			table.sort( list, function (a,b) return a:GetDistance2D(coor) < b:GetDistance2D(coor) end )
 			me:CastAbility(me:GetAbility(1),list[1])
