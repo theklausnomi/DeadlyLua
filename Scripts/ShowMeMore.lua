@@ -743,7 +743,7 @@ end
 
 function FindCharge(cast)
 	for i, v in ipairs(cast) do
-		if v.dayVision == 0 and v.unitState == 29901056 then
+		if v.dayVision == 0 and v.unitState == 0 then
 			return v
 		end
 	end
