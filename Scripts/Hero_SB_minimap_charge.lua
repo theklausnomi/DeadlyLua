@@ -1,11 +1,18 @@
 --<<фаст чардж через минимапу на ближайшего к курсору крипа, по дефолту Q>>
+require("libs.Res")
+require("libs.ScriptConfig")
+
+local config = ScriptConfig.new()
+config:SetParameter("Hotkey", "Q", config.TYPE_HOTKEY)
+config:Load()
 
 local play = false
 
 function SBKey(msg,code)
-	if msg ~= KEY_UP or client.chat then return end
-	if code == string.byte("Q") then		
-		local coor = MinimapToMap()
+	if msg ~= KEY_UP or client.chat or not PlayingGame() then return end
+	if code == config.Hotkey then
+		local me = entityList:GetMyHero()	
+		local coor = MapToMinimap(me.position.x,me.position.y)
 		if coor ~= nil then
 			local me = entityList:GetMyHero()
 			local list = entityList:GetEntities(function (v) return v.type == LuaEntity.TYPE_CREEP and v.alive and v.visible and v.team ~= me.team end)
