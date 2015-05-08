@@ -4,9 +4,7 @@ require("libs.Utils")
 require("libs.Res")
 require("libs.SideMessage")
 
-local effect = {}
-
-local rate = client.screenSize.x/1600
+local effect = {} local play = false local rate = client.screenSize.x/1600
 
 --sunstrike, torrent, and other
 effect.fromcast = {}
@@ -75,9 +73,8 @@ effect.SilenceList = {"modifier_skywrath_mage_ancient_seal","modifier_earth_spir
 "modifier_silence","modifier_silencer_last_word_disarm","modifier_silencer_global_silence","modifier_doom_bringer_doom","modifier_legion_commander_duel"}
 
 function Main(tick)
-
-	if client.console or not SleepCheck() then return end
-	local me = entityList:GetMyHero() if not me then return end
+    if not SleepCheck() or not PlayingGame() then return end
+    local me = entityList:GetMyHero()
 	local cast = entityList:GetEntities({classId=CDOTA_BaseNPC})
 	local hero = entityList:GetEntities({type=LuaEntity.TYPE_HERO})
 	--local projet F= entityList:GetProjectiles({})
@@ -629,11 +626,11 @@ function MinesF(team)
 		end
 		Sleep(350,"ShowMins")
 	end
-end		
+end
 
 function TrapF(team)
 	if SleepCheck("ShowTrap") then
-		local traps = entityList:GetEntities({classId=294})
+		local traps = entityList:GetEntities({classId=CDOTA_BaseNPC_Additive})
 		for i,v in ipairs(traps) do
 			if v.team ~= team then
 				if not effect.TS[v.handle] then
@@ -725,7 +722,7 @@ end
 
 function FindBlast(cast,team)
 	for i, v in ipairs(cast) do
-		if v.team ~= team and v.dayVision == 550 and (v.unitState == 29376896 or v.unitState == 29376768) then
+		if v.team ~= team and v.dayVision == 550 then
 			return v
 		end
 	end
@@ -734,7 +731,7 @@ end
 
 function FindMarch(cast,team)
 	for i, v in ipairs(cast) do
-		if v.team ~= team and v.dayVision == 600 and v.unitState == 29376768 then
+		if v.team ~= team and v.dayVision == 600 then
 			return v
 		end
 	end
@@ -743,7 +740,7 @@ end
 
 function FindCharge(cast)
 	for i, v in ipairs(cast) do
-		if v.dayVision == 0 and v.unitState == 0 then
+		if v.dayVision == 0 then
 			return v
 		end
 	end
@@ -752,7 +749,7 @@ end
 
 function FindBoat(cast,team)
 	for i,v in ipairs(cast) do
-		if v.team ~= team and v.dayVision == 400 and v.unitState == 29901056 then
+		if v.team ~= team and v.dayVision == 400 then
 			return v
 		end
 	end
@@ -799,14 +796,16 @@ function Roshan( kill )
 end
 
 function Load()
-	if PlayingGame() then		
+	if PlayingGame() then
+		play = true		
 		script:RegisterEvent(EVENT_TICK,Main)
 		script:RegisterEvent(EVENT_DOTA,Roshan)
 		script:UnregisterEvent(Load)
 	end
 end
 
-function GameClose()
+function Close()
+	collectgarbage("collect")
 	if play then
 		script:UnregisterEvent(Roshan)
 		script:UnregisterEvent(Main)
@@ -835,8 +834,7 @@ function GameClose()
 	effect.ChargeI2.visible = false
 	effect.Jugernaut.visible = false
 	effect.EsSpirit.visible = false
-	collectgarbage("collect")
 end
 
 script:RegisterEvent(EVENT_TICK,Load)
-script:RegisterEvent(EVENT_CLOSE,GameClose)
+script:RegisterEvent(EVENT_CLOSE,Close)
